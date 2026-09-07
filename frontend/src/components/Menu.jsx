@@ -10,7 +10,7 @@ const Menu = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const { menus, menuId, loading, error, addingItem, addError } = useSelector(
+  const { menus, menuId, loading, error, addError } = useSelector(
     (state) => state.menus
   );
 
@@ -20,8 +20,6 @@ const Menu = () => {
   const [newMenuCategory, setNewMenuCategory] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [itemToAdd, setItemToAdd] = useState({ category: "", foodItemId: "" });
-  const [availableItems, setAvailableItems] = useState([]);
-  const [creatingFood, setCreatingFood] = useState(false);
 
   const [newFood, setNewFood] = useState({
     name: "",
@@ -35,16 +33,6 @@ const Menu = () => {
     dispatch(getMenus(id));
     dispatch(getRestaurants());
   }, [dispatch, id]);
-
-  // fetch food items
-  const fetchItems = async () => {
-    try {
-      const { data } = await api.get(`/v1/eats/items/${id}`);
-      setAvailableItems(data.data);
-    } catch (err) {
-      console.error("failed to load items", err);
-    }
-  };
 
   // FIXED createMenu
   const submitMenuCreation = async (e) => {
@@ -76,10 +64,8 @@ const Menu = () => {
 
       const created = data.data;
 
-      setAvailableItems((prev) => [...prev, created]);
       setItemToAdd({ ...itemToAdd, foodItemId: created._id });
 
-      setCreatingFood(false);
       setNewFood({
         name: "",
         price: "",
@@ -131,7 +117,6 @@ const Menu = () => {
                           category: menu.category,
                           foodItemId: "",
                         });
-                        fetchItems();
                         setShowAddModal(true);
                       }}
                     >

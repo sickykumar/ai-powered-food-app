@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradZara" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a044e"/>
+      <stop offset="100%" stop-color="#18021e"/>
+    </linearGradient>
+    <linearGradient id="ringGradZara" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff007f"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="dressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#be185d"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="url(#ringGradZara)" stroke-width="3" opacity="0.85"/>
+  <circle cx="60" cy="60" r="55" fill="url(#bgGradZara)"/>
+
+  <!-- Back Flowing Hair -->
+  <path d="M30 60 C26 85 34 105 42 110 L44 95 C38 88 38 72 40 60 Z" fill="#31102b"/>
+  <path d="M90 60 C94 85 86 105 78 110 L76 95 C82 88 82 72 80 60 Z" fill="#31102b"/>
+
+  <!-- Outfit / Top -->
+  <path d="M28 110 C28 92 42 84 60 84 C78 84 92 92 92 110 Z" fill="url(#dressGrad)"/>
+  <path d="M50 84 Q60 92 70 84 Z" fill="#fbcfe8"/>
+
+  <!-- Neck -->
+  <rect x="55" y="70" width="10" height="16" rx="3" fill="#fed7aa"/>
+  <!-- Gold Necklace -->
+  <path d="M54 80 Q60 85 66 80" stroke="#f59e0b" stroke-width="1.5" fill="none"/>
+  <circle cx="60" cy="83" r="1.5" fill="#f59e0b"/>
+
+  <!-- Head -->
+  <ellipse cx="60" cy="58" rx="15" ry="18" fill="#fed7aa"/>
+
+  <!-- Chic Long Waves & Side Bangs -->
+  <path d="M44 48 C42 32 52 28 60 28 C68 28 78 32 76 48 C72 40 66 38 60 38 C54 38 48 40 44 48 Z" fill="#581c87"/>
+  <path d="M42 48 Q46 62 43 75" stroke="#581c87" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M78 48 Q74 62 77 75" stroke="#581c87" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Trendy Cat-Eye Sunglasses -->
+  <path d="M46 51 L74 51 C76 51 77 53 77 56 L75 62 C74 65 71 66 68 66 L62 66 C61 66 60 65 60 64 C60 65 59 66 58 66 L52 66 C49 66 46 65 45 62 L43 56 C43 53 44 51 46 51 Z" fill="#18181b"/>
+  <!-- Magenta Mirror Tint -->
+  <path d="M46 53 L58 53 C59 53 60 54 59 56 L57 61 C56 63 54 64 52 64 L47 64 C45 64 44 62 44 60 Z" fill="#ff007f" opacity="0.85"/>
+  <path d="M62 53 L74 53 C75 53 76 54 75 56 L73 61 C72 63 70 64 68 64 L63 64 C62 64 61 62 61 60 Z" fill="#ff007f" opacity="0.85"/>
+  <line x1="47" y1="55" x2="52" y2="60" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+  <line x1="63" y1="55" x2="68" y2="60" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+
+  <!-- Glossy Red Smile -->
+  <path d="M54 70 Q60 76 66 70" stroke="#be123c" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Boba Cup / Beverage Pin on collar -->
+  <rect x="80" y="92" width="7" height="10" rx="1.5" fill="#fde047" stroke="#0f172a" stroke-width="0.8"/>
+  <line x1="83.5" y1="88" x2="83.5" y2="92" stroke="#ff007f" stroke-width="1.2"/>
+  <circle cx="82" cy="99" r="0.8" fill="#0f172a"/>
+  <circle cx="84" cy="97" r="0.8" fill="#0f172a"/>
+  <circle cx="85" cy="100" r="0.8" fill="#0f172a"/>
+</svg>

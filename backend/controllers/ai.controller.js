@@ -148,3 +148,36 @@ exports.addReview = catchAsync(async (req, res) => {
     restaurant,
   });
 });
+
+exports.chatFoodAI = catchAsync(async (req, res) => {
+  const { message, history } = req.body;
+
+  if (!message || message.trim() === "") {
+    return res.status(400).json({
+      success: false,
+      message: "Message is required",
+    });
+  }
+
+  // Fetch some real dishes to give the AI real context
+  let dishes = [];
+  try {
+    dishes = await FoodItem.find({ stock: { $gt: 0 } })
+      .select("name category price ratings")
+      .limit(20)
+      .lean();
+  } catch (e) {
+    // ignore
+  }
+
+  const result = await aiService.chatWithFoodAI({
+    message,
+    history: history || [],
+    availableDishes: dishes,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: result,
+  });
+});

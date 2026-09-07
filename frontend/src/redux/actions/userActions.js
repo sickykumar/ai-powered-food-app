@@ -11,8 +11,6 @@ import {
   updateRequest,
   updateSuccess,
   updateFail,
-  updateReset,
-  clearErrors,
 } from "../slices/userSlice";
 import { fetchCartItems } from "./cartActions";
 import { clearCart } from "../slices/cartSlice";

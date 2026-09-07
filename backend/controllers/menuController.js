@@ -34,6 +34,8 @@
 // Add item to menu
 
 
+require("../models/foodItem");
+require("../models/restaurant");
 const Menu = require("../models/menu");
 //Now we are importing ErrorHandler”
 //ErrorHandler → custom error class
@@ -95,7 +97,9 @@ exports.getAllMenus = catchAsync(async (req, res, next) => {
     ? { restaurant: req.params.storeId }
     : {};
 
-  const menu = await Menu.find(filter).populate("menu.items");
+  const menu = await Menu.find(filter)
+    .populate("menu.items")
+    .populate("restaurant");
 
   res.status(200).json({
     status: "success",

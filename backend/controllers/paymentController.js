@@ -9,8 +9,8 @@ exports.processPayment = catchAsyncErrors(async (req, res, next) => {
   const { items, restaurant, couponCode } = req.body;
 
   // Dynamically resolve the frontend origin from the incoming request
-  // so that Stripe redirects to the correct domain (Vercel or localhost)
-  const frontendOrigin = (req.headers.origin || process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, "");
+  const rawOrigin = req.headers.origin || process.env.FRONTEND_URL || "http://localhost:5173";
+  const frontendOrigin = rawOrigin.replace(/['"]/g, "").replace(/\/$/, "");
 
   const sessionParams = {
     customer_email: req.user.email,

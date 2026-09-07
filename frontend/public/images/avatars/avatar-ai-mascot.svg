@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradAI" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05192d"/>
+      <stop offset="50%" stop-color="#140b2e"/>
+      <stop offset="100%" stop-color="#2d0a25"/>
+    </linearGradient>
+    <linearGradient id="ringGradAI" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff007f"/>
+      <stop offset="40%" stop-color="#8b5cf6"/>
+      <stop offset="80%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#ff9900"/>
+    </linearGradient>
+    <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#ff007f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer RGB Rainbow Ring -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="url(#ringGradAI)" stroke-width="3" opacity="0.95"/>
+  <circle cx="60" cy="60" r="55" fill="url(#bgGradAI)"/>
+
+  <!-- Cyber Bot Body / Torso -->
+  <path d="M30 110 C30 90 42 82 60 82 C78 82 90 90 90 110 Z" fill="#0f172a"/>
+  <!-- Neon Armor Plates -->
+  <path d="M38 110 C38 95 48 88 60 88 C72 88 82 95 82 110 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.2"/>
+  <!-- Glowing Food Power Core -->
+  <circle cx="60" cy="98" r="6" fill="#00f2fe" opacity="0.2"/>
+  <circle cx="60" cy="98" r="3.5" fill="#00f2fe"/>
+  <!-- Mini Fork & Spoon Emblems on Armor -->
+  <line x1="56" y1="95" x2="56" y2="102" stroke="#ffffff" stroke-width="0.8"/>
+  <line x1="64" y1="95" x2="64" y2="102" stroke="#ffffff" stroke-width="0.8"/>
+
+  <!-- Cyber Neck Connection -->
+  <rect x="54" y="72" width="12" height="12" rx="3" fill="#334155"/>
+  <line x1="56" y1="76" x2="64" y2="76" stroke="#00f2fe" stroke-width="1.2"/>
+  <line x1="56" y1="80" x2="64" y2="80" stroke="#ff007f" stroke-width="1.2"/>
+
+  <!-- Bot Head Base -->
+  <rect x="42" y="44" width="36" height="30" rx="15" fill="#1e153a" stroke="#8b5cf6" stroke-width="1.5"/>
+
+  <!-- Holographic Cyber Visor -->
+  <rect x="45" y="52" width="30" height="14" rx="7" fill="#090d16" stroke="#00f2fe" stroke-width="1.2"/>
+  <rect x="47" y="54" width="26" height="10" rx="5" fill="url(#visorGrad)" opacity="0.85"/>
+  <!-- Bot Glowing Digital Eyes -->
+  <circle cx="53" cy="59" r="2.2" fill="#ffffff"/>
+  <circle cx="67" cy="59" r="2.2" fill="#ffffff"/>
+
+  <!-- Cute Digital Smile -->
+  <path d="M55 69 Q60 73 65 69" stroke="#00f2fe" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+
+  <!-- Antennae with Glowing Spheres -->
+  <line x1="39" y1="50" x2="33" y2="44" stroke="#8b5cf6" stroke-width="2"/>
+  <circle cx="32" cy="43" r="2.5" fill="#00f2fe"/>
+  <line x1="81" y1="50" x2="87" y2="44" stroke="#8b5cf6" stroke-width="2"/>
+  <circle cx="88" cy="43" r="2.5" fill="#ff007f"/>
+
+  <!-- Mini Golden Chef Hat on Bot Head -->
+  <path d="M50 44 C48 34 53 30 57 32 C59 28 65 28 67 32 C71 30 76 34 74 44 Z" fill="#ffffff"/>
+  <path d="M51 44 Q62 46 73 44 L72 41 Q62 43 52 41 Z" fill="#ff9900"/>
+
+  <!-- Sparkle Particle -->
+  <path d="M22 28 L24 32 L28 34 L24 36 L22 40 L20 36 L16 34 L20 32 Z" fill="#00f2fe"/>
+  <path d="M96 24 L97 27 L100 28 L97 29 L96 32 L95 29 L92 28 L95 27 Z" fill="#ff007f"/>
+</svg>

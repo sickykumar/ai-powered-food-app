@@ -18,13 +18,8 @@ const OrderDetails = () => {
   const { loading, error, order } = useSelector((state) => state.order);
   const { user } = useSelector((state) => state.user || {});
 
-  const [status, setStatus] = useState("");
-
-  useEffect(() => {
-    if (order) {
-      setStatus(order.orderStatus || "Processing");
-    }
-  }, [order]);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const status = selectedStatus ?? (order?.orderStatus || "Processing");
 
   const updateOrderHandler = () => {
     dispatch(updateOrder(id, { status })).then(() => {
@@ -177,7 +172,7 @@ const OrderDetails = () => {
                     className="form-control"
                     name="status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="Processing">Processing</option>
                     <option value="Delivered">Delivered</option>

@@ -19,6 +19,7 @@ const Cart = () => {
 
   const { cartItems, restaurant } = useSelector((state) => state.cart);
   const { error: orderError } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user || {});
 
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -105,6 +106,10 @@ const Cart = () => {
   };
 
   const checkoutHandler = () => {
+    if (!user) {
+      toast.info("Please sign in to proceed with checkout");
+      return navigate("/users/login");
+    }
     dispatch(payment(cartItems, restaurant, appliedCoupon?.couponName));
   };
 

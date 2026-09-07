@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e153a"/>
+      <stop offset="100%" stop-color="#0b1e36"/>
+    </linearGradient>
+    <linearGradient id="hatGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="url(#ringGrad)" stroke-width="3" opacity="0.85"/>
+  <circle cx="60" cy="60" r="55" fill="url(#bgGrad1)"/>
+
+  <!-- Body / Chef Coat -->
+  <path d="M28 110 C28 92 42 82 60 82 C78 82 92 92 92 110 Z" fill="#0f172a"/>
+  <!-- Chef Double Breasted Jacket -->
+  <path d="M36 110 C36 94 46 86 60 86 C74 86 84 94 84 110 Z" fill="#f8fafc"/>
+  <circle cx="56" cy="94" r="1.5" fill="#0f172a"/>
+  <circle cx="64" cy="94" r="1.5" fill="#0f172a"/>
+  <circle cx="56" cy="101" r="1.5" fill="#0f172a"/>
+  <circle cx="64" cy="101" r="1.5" fill="#0f172a"/>
+  <!-- Red Scarf -->
+  <path d="M52 86 L68 86 L60 93 Z" fill="#ff007f"/>
+
+  <!-- Neck -->
+  <rect x="54" y="70" width="12" height="14" rx="3" fill="#fbcfe8"/>
+
+  <!-- Head -->
+  <ellipse cx="60" cy="60" rx="17" ry="20" fill="#fde047" opacity="0.1"/>
+  <ellipse cx="60" cy="58" rx="16" ry="18" fill="#fbcfe8"/>
+
+  <!-- Hair (Male - Modern Pompadour) -->
+  <path d="M44 52 C44 40 50 36 60 36 C70 36 76 40 76 52 C73 47 67 46 60 46 C53 46 47 47 44 52 Z" fill="#1e293b"/>
+
+  <!-- Eyes & Eyebrows -->
+  <ellipse cx="53" cy="56" rx="2" ry="2.5" fill="#0f172a"/>
+  <ellipse cx="67" cy="56" rx="2" ry="2.5" fill="#0f172a"/>
+  <circle cx="54" cy="55" r="0.8" fill="#ffffff"/>
+  <circle cx="68" cy="55" r="0.8" fill="#ffffff"/>
+  <path d="M50 51 Q53 49 56 51" stroke="#1e293b" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M64 51 Q67 49 70 51" stroke="#1e293b" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Smile & Mustache -->
+  <path d="M55 64 Q60 69 65 64" stroke="#0f172a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M52 62 Q56 65 60 62 Q64 65 68 62" stroke="#334155" stroke-width="1.2" fill="none"/>
+
+  <!-- Chef Toque Hat -->
+  <ellipse cx="60" cy="38" rx="21" ry="6" fill="#cbd5e1"/>
+  <path d="M41 38 C39 24 46 16 52 18 C55 12 65 12 68 18 C74 16 81 24 79 38 Z" fill="url(#hatGrad)"/>
+  <path d="M43 38 Q60 41 77 38 L76 34 Q60 37 44 34 Z" fill="#00f2fe"/>
+</svg>

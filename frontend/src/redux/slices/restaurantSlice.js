@@ -95,7 +95,7 @@ const restaurantSlice = createSlice({
 
 
 // ANALYZE REVIEWS
-      .addCase(analyzeReviews.pending, (state) => {
+      .addCase(analyzeReviews.pending, () => {
         // Do not set page-wide state.loading to prevent unmounting other components
       })
 

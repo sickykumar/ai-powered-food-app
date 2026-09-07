@@ -17,16 +17,13 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
 
   let avatar = {};
 
-  // If avatar not provided OR default avatar
-  if (!req.body.avatar || req.body.avatar === "/images/images.png") {
-
+  // If avatar not provided OR is one of the default preset avatars
+  if (!req.body.avatar || req.body.avatar === "/images/images.png" || req.body.avatar.startsWith("/images/")) {
     avatar = {
       public_id: "default",
-      url: "/images/images.png",
+      url: req.body.avatar || "/images/avatars/avatar-male-chef.svg",
     };
-
   } else {
-
     const result = await cloudinary.uploader.upload(req.body.avatar, {
       folder: "avatars",
       width: 150,
@@ -179,26 +176,31 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     email: req.body.email,
   };
 
-  if (req.body.avatar !== "") {
+  if (req.body.avatar && req.body.avatar !== "") {
+    if (req.body.avatar.startsWith("/images/")) {
+      newUserData.avatar = {
+        public_id: "default",
+        url: req.body.avatar,
+      };
+    } else {
+      const user = await User.findById(req.user.id);
+      const image_id = user.avatar?.public_id;
 
-    const user = await User.findById(req.user.id);
+      if (image_id && image_id !== "default") {
+        await cloudinary.uploader.destroy(image_id);
+      }
 
-    const image_id = user.avatar?.public_id;
+      const result = await cloudinary.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
+        crop: "scale",
+      });
 
-    if (image_id && image_id !== "default") {
-      await cloudinary.uploader.destroy(image_id);
+      newUserData.avatar = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
     }
-
-    const result = await cloudinary.uploader.upload(req.body.avatar, {
-      folder: "avatars",
-      width: 150,
-      crop: "scale",
-    });
-
-    newUserData.avatar = {
-      public_id: result.public_id,
-      url: result.secure_url,
-    };
   }
 
   await User.findByIdAndUpdate(req.user.id, newUserData, {
@@ -228,7 +230,10 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
   try {
 
-    const resetURL = `${process.env.FRONTEND_URL}/users/resetPassword/${resetToken}`;
+    const frontendBase = (process.env.FRONTEND_URL || "http://localhost:5173")
+      .replace(/['"]/g, "")
+      .replace(/\/$/, "");
+    const resetURL = `${frontendBase}/users/resetPassword/${resetToken}`;
 
     await new Email(user, resetURL).sendPasswordReset();
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faIndianRupeeSign } from "@fortawesome/free-solid-svg-icons";
+import { faIndianRupeeSign, faFire, faLeaf, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,157 +12,185 @@ import api from "../utils/api";
 import { getMenus } from "../redux/actions/menuActions";
 
 const Fooditem = ({ fooditem, restaurant }) => {
-  const [quantity, setQuantity] = useState(1);
-  const [showButtons, setShowButtons] = useState(false);
+  const [tiltStyle, setTiltStyle] = useState({});
+  const cardRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //state (Redux Toolkit user slice)
+  // State
   const { user } = useSelector((state) => state.user);
   const isAuthenticated = !!user;
-
-  //cart from slice
   const { cartItems } = useSelector((state) => state.cart);
 
-  useEffect(() => {
-    const cartItem = cartItems.find(
-      (item) => item.foodItem._id === fooditem._id
-    );
+  // Derived cart state (pure & reactive)
+  const cartItem = (cartItems || []).find(
+    (item) => item.foodItem?._id === fooditem._id
+  );
+  const inCart = !!cartItem;
+  const quantity = cartItem ? cartItem.quantity : 1;
 
-    if (cartItem) {
-      setQuantity(cartItem.quantity);
-      setShowButtons(true);
-    } else {
-      setQuantity(1);
-      setShowButtons(false);
-    }
-  }, [cartItems, fooditem]);
+  // 3D Interactive Mouse Tilt
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-  // ➖ decrease
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+
+    setTiltStyle({
+      transform: `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px)`,
+      transition: "transform 0.1s ease-out",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTiltStyle({
+      transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)",
+      transition: "transform 0.4s ease-out",
+    });
+  };
+
+  // Decrease quantity
   const decreaseQty = () => {
     if (quantity > 1) {
-      const newQuantity = quantity - 1;
-      setQuantity(newQuantity);
-
-      //params
-      dispatch(updateCartQuantity(fooditem._id, newQuantity));
+      dispatch(updateCartQuantity(fooditem._id, quantity - 1));
     } else {
-      setQuantity(0);
-      setShowButtons(false);
       dispatch(removeItemFromCart(fooditem._id));
     }
   };
 
-  // ➕ increase
+  // Increase quantity
   const increaseQty = () => {
     if (quantity < fooditem.stock) {
-      const newQuantity = quantity + 1;
-      setQuantity(newQuantity);
-
-      dispatch(updateCartQuantity(fooditem._id, newQuantity));
+      dispatch(updateCartQuantity(fooditem._id, quantity + 1));
     } else {
       alert("Exceeded stock limit");
     }
   };
 
-  //add to cart
+  // Add to cart
   const addToCartHandler = () => {
     if (!isAuthenticated) {
       return navigate("/users/login");
     }
-
-    dispatch(addItemToCart(fooditem._id, restaurant, quantity));
-    setShowButtons(true);
+    dispatch(addItemToCart(fooditem._id, restaurant, 1));
   };
+
+  // Approximate calories & veg status
+  const isPureVeg = fooditem.category?.toLowerCase().includes("veg") && !fooditem.category?.toLowerCase().includes("non");
+  const estimatedCalories = fooditem.calories || Math.round(260 + (fooditem.price % 300));
 
   return (
     <div className="col-sm-12 col-md-6 col-lg-3 my-3">
-      <div className="card p-3 rounded">
-        <img
-          className="card-img-top mx-auto food-image"
-          src={fooditem.images?.[0]?.url || "/images/placeholder.png"}
-          alt={fooditem.name}
-        />
+      <div
+        className="card food-card-3d rounded"
+        ref={cardRef}
+        style={tiltStyle}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Top Badges */}
+        <div className="food-badge-overlay d-flex justify-content-between">
+          <span className={`badge-pill ${isPureVeg ? "veg-pill" : "nonveg-pill"}`}>
+            <FontAwesomeIcon icon={faLeaf} className="mr-1" />
+            {isPureVeg ? "Pure Veg" : "Gourmet"}
+          </span>
+          <span className="badge-pill calorie-pill">
+            <FontAwesomeIcon icon={faFire} className="mr-1" />
+            {estimatedCalories} kcal
+          </span>
+        </div>
 
-        <div className="card-body d-flex flex-column">
-          <h5 className="card-title">{fooditem.name}</h5>
-
-          <p className="fooditem_des">{fooditem.description}</p>
-
-          <p className="card-text">
+        {/* 3D Floating Image with Depth */}
+        <div className="food-img-container">
+          <img
+            className="card-img-top food-image-3d"
+            src={fooditem.images?.[0]?.url || "/images/placeholder.png"}
+            alt={fooditem.name}
+            onError={(e) => {
+              e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80";
+            }}
+          />
+          <div className="food-price-tag">
             <FontAwesomeIcon icon={faIndianRupeeSign} size="xs" />
             {fooditem.price}
-          </p>
+          </div>
+        </div>
 
-          {!showButtons ? (
-          
-            (!isAuthenticated || user?.role !== "admin") && (
-              <button
-              id="cart_btn"
-              className="btn btn-primary ml-4"
-              disabled={fooditem.stock === 0}
-              onClick={addToCartHandler}
-            >
-              Add to Cart
-            </button>
-            )
-          ) : (
-            <div className="stockCounter d-inline">
-              <span className="btn btn-danger minus" onClick={decreaseQty}>
-                -
+        <div className="card-body d-flex flex-column justify-content-between p-3">
+          <div>
+            <h5 className="card-title food-title-3d">{fooditem.name}</h5>
+            <p className="fooditem_des food-desc-3d">{fooditem.description}</p>
+          </div>
+
+          <div className="food-card-footer mt-3">
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="stock-indicator">
+                <span className={`stock-dot ${fooditem.stock > 0 ? "in-stock" : "out-stock"}`} />
+                {fooditem.stock > 0 ? "Freshly Available" : "Sold Out"}
               </span>
-
-              <input
-                type="number"
-                className="form-control count d-inline"
-                value={quantity}
-                readOnly
-              />
-
-              <span className="btn btn-primary plus" onClick={increaseQty}>
-                +
-              </span>
+              {fooditem.ratings > 0 && (
+                <span className="rating-pill">
+                  <FontAwesomeIcon icon={faStar} className="text-warning mr-1" />
+                  {fooditem.ratings}
+                </span>
+              )}
             </div>
-          )}
 
-          <hr />
+            {!inCart ? (
+              (!isAuthenticated || user?.role !== "admin") && (
+                <button
+                  id="cart_btn"
+                  className="btn btn-primary add-cart-btn-3d w-100"
+                  disabled={fooditem.stock === 0}
+                  onClick={addToCartHandler}
+                >
+                  {fooditem.stock === 0 ? "Sold Out" : "+ Add to Feast"}
+                </button>
+              )
+            ) : (
+              <div className="stockCounter d-flex align-items-center justify-content-center gap-2">
+                <button className="qty-btn minus-btn" onClick={decreaseQty}>
+                  -
+                </button>
+                <input
+                  type="number"
+                  className="form-control qty-display"
+                  value={quantity}
+                  readOnly
+                />
+                <button className="qty-btn plus-btn" onClick={increaseQty}>
+                  +
+                </button>
+              </div>
+            )}
 
-          <p>
-            Status:
-            <span
-              className={
-                fooditem.stock > 0 ? "greenColor" : "redColor"
-              }
-            >
-              {fooditem.stock > 0 ? "In Stock" : "Out of Stock"}
-            </span>
-          </p>
-
-          {/* ADMIN DELETE */}
-          {isAuthenticated && user?.role === "admin" && (
-            <button
-              className="btn btn-danger btn-sm mt-2"
-              onClick={async () => {
-                if (!window.confirm("Delete this food item?")) return;
-
-                try {
-                  await api.delete(`/v1/eats/item/${fooditem._id}`);
-
-                  if (restaurant) {
-                    dispatch(getMenus(restaurant));
+            {/* Admin Delete Action */}
+            {isAuthenticated && user?.role === "admin" && (
+              <button
+                className="btn btn-danger btn-sm mt-2 w-100"
+                onClick={async () => {
+                  if (!window.confirm("Delete this food item?")) return;
+                  try {
+                    await api.delete(`/v1/eats/item/${fooditem._id}`);
+                    if (restaurant) {
+                      dispatch(getMenus(restaurant));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    alert(err.response?.data?.message || "Unable to delete item");
                   }
-                } catch (err) {
-                  console.error(err);
-                  alert(
-                    err.response?.data?.message || "Unable to delete item"
-                  );
-                }
-              }}
-            >
-              Delete
-            </button>
-          )} 
+                }}
+              >
+                Delete Item
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

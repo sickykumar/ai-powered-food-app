@@ -1,178 +1,157 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Loader from "../layout/Loader";
-
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/actions/userActions";
 import { clearErrors } from "../../redux/slices/userSlice";
-
 import { toast } from "react-toastify";
+import "./Auth.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { isAuthenticated, loading, error } = useSelector(
-    (state) => state.user,
+    (state) => state.user
   );
+
+  // Redirect destination if user was redirected from protected route
+  const redirectPath = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     if (isAuthenticated) {
-      toast.success("Login successful");
-      navigate("/");
+      toast.success("Welcome back! Logged in successfully");
+      navigate(redirectPath, { replace: true });
     }
 
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, isAuthenticated, error, navigate]);
+  }, [dispatch, isAuthenticated, error, navigate, redirectPath]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.warning("Please enter both email and password");
+      return;
+    }
     dispatch(login(email, password));
   };
 
   return (
-    <>
+    <div className="auth-page-wrapper">
+      <div className="auth-glow-backdrop" />
+
       {loading ? (
         <Loader />
       ) : (
-        <div className="row wrapper">
-          <div className="col-10 col-lg-5">
-            <form className="shadow-lg" onSubmit={submitHandler}>
-              <h1 className="mb-3">Login</h1>
+        <div className="auth-card-3d">
+          {/* Card Header */}
+          <div className="auth-header">
+            <span className="auth-brand-pill">✦ Culinary Access</span>
+            <h1 className="auth-title">Welcome Back</h1>
+            <p className="auth-subtitle">
+              Sign in to explore personalized AI feasts, real-time tracking, and gourmet benefits.
+            </p>
+          </div>
 
-              <div 
-                className="demo-autofill-container mb-4 p-3" 
-                style={{
-                  background: "linear-gradient(135deg, rgba(7, 131, 71, 0.04) 0%, rgba(5, 106, 58, 0.08) 100%)",
-                  border: "1px dashed rgba(7, 131, 71, 0.3)",
-                  borderRadius: "12px",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.02)"
+          {/* 1-Click Demo Quick-Fill */}
+          <div className="demo-quickfill-box">
+            <div className="d-flex align-items-center justify-content-between mb-2">
+              <span style={{ fontSize: "0.75rem", fontWeight: "700", color: "#10b981", letterSpacing: "1px", textTransform: "uppercase" }}>
+                ⚡ Fast Demo Login
+              </span>
+              <span className="badge" style={{ fontSize: "0.68rem", backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#34d399", padding: "3px 8px", borderRadius: "8px" }}>
+                1-Click Auto Fill
+              </span>
+            </div>
+            <div className="d-flex gap-2">
+              <button
+                type="button"
+                className="demo-btn-user flex-grow-1"
+                onClick={() => {
+                  setEmail("test@user.com");
+                  setPassword("test123");
+                  toast.info("User demo credentials filled!");
                 }}
               >
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <span style={{ fontSize: "0.75rem", fontWeight: "700", color: "#056a3a", letterSpacing: "1px", textTransform: "uppercase" }}>
-                    ⚡ Demo Quick-fill
-                  </span>
-                  <span className="badge" style={{ fontSize: "0.7rem", backgroundColor: "#eaf6ed", color: "#078347", fontWeight: "bold", padding: "4px 8px", borderRadius: "10px" }}>
-                    1-Click Auto Fill
-                  </span>
-                </div>
-                <div className="d-flex" style={{ gap: "10px" }}>
-                  <button
-                    type="button"
-                    className="btn btn-sm"
-                    style={{
-                      flex: 1,
-                      padding: "8px 12px",
-                      fontSize: "0.85rem",
-                      fontWeight: "600",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "6px",
-                      border: "1.5px solid #078347",
-                      color: "#078347",
-                      backgroundColor: "transparent",
-                      transition: "all 0.2s ease"
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = "#078347";
-                      e.currentTarget.style.color = "#ffffff";
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                      e.currentTarget.style.color = "#078347";
-                      e.currentTarget.style.transform = "none";
-                    }}
-                    onClick={() => {
-                      setEmail("test@user.com");
-                      setPassword("test123");
-                    }}
-                  >
-                    👤 User Demo
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm"
-                    style={{
-                      flex: 1,
-                      padding: "8px 12px",
-                      fontSize: "0.85rem",
-                      fontWeight: "600",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "6px",
-                      border: "1.5px solid #dc3545",
-                      color: "#dc3545",
-                      backgroundColor: "transparent",
-                      transition: "all 0.2s ease"
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = "#dc3545";
-                      e.currentTarget.style.color = "#ffffff";
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                      e.currentTarget.style.color = "#dc3545";
-                      e.currentTarget.style.transform = "none";
-                    }}
-                    onClick={() => {
-                      setEmail("test@admin.com");
-                      setPassword("test123");
-                    }}
-                  >
-                    🛠️ Admin Demo
-                  </button>
-                </div>
+                👤 User Demo
+              </button>
+              <button
+                type="button"
+                className="demo-btn-admin flex-grow-1"
+                onClick={() => {
+                  setEmail("test@admin.com");
+                  setPassword("test123");
+                  toast.info("Admin demo credentials filled!");
+                }}
+              >
+                🛠️ Admin Demo
+              </button>
+            </div>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={submitHandler}>
+            <div className="auth-input-group">
+              <label className="auth-label">Email Address</label>
+              <input
+                type="email"
+                className="auth-input form-control"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="auth-input-group">
+              <div className="d-flex justify-content-between align-items-center mb-1">
+                <label className="auth-label mb-0">Password</label>
+                <button
+                  type="button"
+                  className="btn btn-link p-0 text-muted"
+                  style={{ fontSize: "0.78rem", textDecoration: "none" }}
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                className="auth-input form-control"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              disabled={loading}
+            >
+              {loading ? "Authenticating..." : "Sign In to Feast →"}
+            </button>
+          </form>
 
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              <Link to="/users/forgetPassword" className="float-right mb-4">
-                Forgot Password
-              </Link>
-
-              <button className="btn btn-block py3">LOGIN</button>
-
-              <div className="d-flex justify-content-between align-items-center mt-3">
-                <Link to="/users/signup">
-                  NEW USER?
-                </Link>
-              </div>
-            </form>
+          {/* Card Footer */}
+          <div className="auth-card-footer">
+            Don't have an account yet?
+            <Link to="/users/signup" className="auth-link">
+              Create Account
+            </Link>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

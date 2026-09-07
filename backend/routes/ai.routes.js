@@ -21,8 +21,11 @@ router.post("/generate-food-ai/:foodId", (req, res, next) => {
   next();
 }, aiController.generateAndSaveFoodAI);
 
+// AI Chatbot endpoint
+router.post("/chat", aiController.chatFoodAI);
+
 //analyzer
-router.put("/admin/restaurants/:id/analyze", aiController.analyzeRestaurantReviews)
+router.put("/admin/restaurants/:id/analyze", aiController.analyzeRestaurantReviews);
 
 
 

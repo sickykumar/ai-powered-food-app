@@ -13,6 +13,7 @@ const { protect } = require("../controllers/authController");
 const { authorizeRoles } = require("../middlewares/authorizeRoles");
 router.route("/item").post(protect, authorizeRoles("admin"), createFoodItem);
 
+router.route("/items").get(getAllFoodItems);
 router.route("/items/:storeId").get(getAllFoodItems);
 router
   .route("/item/:foodId")

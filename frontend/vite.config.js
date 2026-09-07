@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_API_URL || "http://localhost:8080",
+          target: env.VITE_API_URL || "https://ai-powered-food-app.onrender.com",
           changeOrigin: true,
           secure: false,
         },

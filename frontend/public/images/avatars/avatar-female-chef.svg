@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradFemaleChef" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b133b"/>
+      <stop offset="100%" stop-color="#160826"/>
+    </linearGradient>
+    <linearGradient id="ringGradFemaleChef" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff007f"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="hatGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ede9fe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="url(#ringGradFemaleChef)" stroke-width="3" opacity="0.85"/>
+  <circle cx="60" cy="60" r="55" fill="url(#bgGradFemaleChef)"/>
+
+  <!-- Body / Chef Apron -->
+  <path d="M28 110 C28 92 42 82 60 82 C78 82 92 92 92 110 Z" fill="#2e1065"/>
+  <path d="M38 110 C38 95 48 88 60 88 C72 88 82 95 82 110 Z" fill="#ffffff"/>
+  <!-- Magenta Silk Scarf -->
+  <path d="M50 86 Q60 92 70 86 L65 95 L55 95 Z" fill="#ff007f"/>
+
+  <!-- Neck -->
+  <rect x="55" y="70" width="10" height="15" rx="3" fill="#fed7aa"/>
+
+  <!-- Hair (Behind) -->
+  <path d="M36 56 C34 78 40 88 44 92 C42 80 44 68 46 62 Z" fill="#451a03"/>
+  <path d="M84 56 C86 78 80 88 76 92 C78 80 76 68 74 62 Z" fill="#451a03"/>
+
+  <!-- Head -->
+  <ellipse cx="60" cy="59" rx="15" ry="17" fill="#fed7aa"/>
+
+  <!-- Hair (Front & Bun) -->
+  <path d="M45 52 C45 38 52 35 60 35 C68 35 75 38 75 52 C70 46 65 45 60 45 C54 45 49 46 45 52 Z" fill="#451a03"/>
+  <!-- Hair curls framing face -->
+  <path d="M44 54 Q48 64 45 70" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M76 54 Q72 64 75 70" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Eyes with Eyelashes & Cheeks -->
+  <ellipse cx="53" cy="57" rx="2" ry="2.2" fill="#1e1b4b"/>
+  <ellipse cx="67" cy="57" rx="2" ry="2.2" fill="#1e1b4b"/>
+  <circle cx="54" cy="56" r="0.7" fill="#ffffff"/>
+  <circle cx="68" cy="56" r="0.7" fill="#ffffff"/>
+  <!-- Eyelash flicks -->
+  <path d="M51 55 L49 53" stroke="#1e1b4b" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M69 55 L71 53" stroke="#1e1b4b" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Eyebrows -->
+  <path d="M50 52 Q53 49 56 51" stroke="#451a03" stroke-width="1.2" fill="none"/>
+  <path d="M64 51 Q67 49 70 52" stroke="#451a03" stroke-width="1.2" fill="none"/>
+  <!-- Blushing cheeks -->
+  <circle cx="49" cy="62" r="3" fill="#ff007f" opacity="0.3"/>
+  <circle cx="71" cy="62" r="3" fill="#ff007f" opacity="0.3"/>
+
+  <!-- Smile with Lip Tint -->
+  <path d="M55 64 Q60 69 65 64" stroke="#e11d48" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Chef Hat -->
+  <ellipse cx="60" cy="38" rx="20" ry="6" fill="#cbd5e1"/>
+  <path d="M42 38 C40 22 47 16 53 18 C56 12 64 12 67 18 C73 16 80 22 78 38 Z" fill="url(#hatGrad2)"/>
+  <path d="M43 38 Q60 41 77 38 L76 34 Q60 37 44 34 Z" fill="#ff007f"/>
+  <!-- Sparkle -->
+  <path d="M84 28 L86 32 L90 34 L86 36 L84 40 L82 36 L78 34 L82 32 Z" fill="#fde047"/>
+</svg>
