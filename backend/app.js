@@ -28,11 +28,13 @@ app.use(
       const allowedOrigins = [
         "http://localhost:5173",
         "http://localhost:3000",
+        "https://food.sickykumar.in",
         "https://ai-powered-food-app.vercel.app",
       ];
 
       const cleanOrigin = origin.replace(/\/$/, "");
       const isVercelDomain = cleanOrigin.endsWith(".vercel.app");
+      const isSickykumarDomain = cleanOrigin.endsWith(".sickykumar.in") || cleanOrigin === "https://sickykumar.in";
       const envOrigin = process.env.FRONTEND_URL
         ? process.env.FRONTEND_URL.replace(/['"]/g, "").replace(/\/$/, "")
         : null;
@@ -40,6 +42,7 @@ app.use(
       const isAllowed =
         allowedOrigins.some((o) => o.replace(/\/$/, "") === cleanOrigin) ||
         isVercelDomain ||
+        isSickykumarDomain ||
         (envOrigin && envOrigin === cleanOrigin);
 
       if (isAllowed) {

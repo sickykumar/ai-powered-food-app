@@ -3,7 +3,7 @@
 import axios from "axios";
 import qs from "qs";
 
-const LIVE_BACKEND_URL = "https://ai-powered-food-app.onrender.com";
+const LIVE_BACKEND_URL = "https://api-food.sickykumar.in";
 
 const api = axios.create({
   baseURL: ((import.meta.env.VITE_API_URL || LIVE_BACKEND_URL).replace(/\/$/, "")) + "/api",
