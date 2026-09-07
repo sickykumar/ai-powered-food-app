@@ -1,0 +1,19 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /eats/stores
+Allow: /eats/menus/*
+Disallow: /users/me
+Disallow: /users/me/*
+Disallow: /users/resetPassword/*
+Disallow: /admin/*
+Disallow: /api/*
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Host
+Host: https://ai-powered-food-app.vercel.app
+
+# Sitemap
+Sitemap: https://ai-powered-food-app.vercel.app/sitemap.xml

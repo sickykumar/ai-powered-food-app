@@ -18,6 +18,7 @@ import ListOrders from "./components/order/ListOrders";
 import OrderDetails from "./components/order/OrderDetails";
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import ErrorPage from "./components/layout/ErrorPage";
+import MetaSEO from "./components/layout/MetaSEO";
 import coldStorageGuard from "./utils/coldStorageGuard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -34,6 +35,7 @@ function App() {
     <>
       <ToastContainer position="bottom-right" theme="dark" autoClose={3000} />
       <Router>
+        <MetaSEO />
         <div className="App">
           <Header />
           <main className="app-main-content">
