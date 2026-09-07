@@ -5,6 +5,8 @@ import {
   sortByRatings,
   sortByReviews,
   toggleVegOnly,
+  setSearchQuery,
+  clearSearchQuery,
 } from "../redux/slices/restaurantSlice";
 import {
   createRestaurant,
@@ -122,6 +124,7 @@ const Home = () => {
     loading: restaurantsLoading,
     error: restaurantsError,
     restaurants,
+    searchQuery,
     showVegOnly,
     creating,
     createError,
@@ -286,9 +289,21 @@ const Home = () => {
     }
   };
 
-  // Filter restaurants by category or search keyword
+  // Filter restaurants by category or live search query
   const filteredRestaurants = (restaurants || []).filter((r) => {
     if (showVegOnly && !r.isVeg) return false;
+
+    // Live global search query filtering (URL NOT exposed)
+    if (searchQuery && searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        (r.name && r.name.toLowerCase().includes(q)) ||
+        (r.cuisine && r.cuisine.toLowerCase().includes(q)) ||
+        (r.location && r.location.toLowerCase().includes(q)) ||
+        (r.address && r.address.toLowerCase().includes(q));
+      if (!matchesSearch) return false;
+    }
+
     if (activeCategory === "All") return true;
     if (activeCategory === "Pure Veg") return r.isVeg;
     return (
@@ -317,7 +332,7 @@ const Home = () => {
             delivery with automated server keep-alive and zero delay.
           </p>
 
-          {/* Quick AI Search Prompt Pills */}
+          {/* Quick AI Search Prompt Pills - URL NOT exposed */}
           <div className="d-flex flex-wrap justify-content-center gap-2 mt-4 hero-prompt-pills">
             <span className="prompt-label text-muted d-none d-md-inline">Try asking:</span>
             {[
@@ -331,7 +346,12 @@ const Home = () => {
                 className="hero-prompt-chip"
                 onClick={() => {
                   const cleaned = prompt.replace(/[🔥🥗🌱⚡]/gu, "").trim();
-                  navigate(`/eats/stores/search/${encodeURIComponent(cleaned.split(" ")[1] || cleaned)}`);
+                  const searchWord = cleaned.split(" ")[1] || cleaned;
+                  dispatch(setSearchQuery(searchWord));
+                  const target = document.getElementById("restaurants-grid-section");
+                  if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
                 }}
               >
                 {prompt}
@@ -611,7 +631,29 @@ const Home = () => {
       </section>
 
       {/* 7. ALL RESTAURANTS SHOWCASE & SMART FILTERS */}
-      <section className="all-restaurants-section my-5">
+      <section className="all-restaurants-section my-5" id="restaurants-grid-section">
+        {/* Active Search Query Feedback Bar (URL NOT exposed) */}
+        {searchQuery && (
+          <div className="active-search-filter-banner mb-4 p-3 rounded-4 d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center gap-2">
+              <span className="search-filter-icon">🔍</span>
+              <div>
+                <span className="text-white-50 small d-block">Live Filter Active:</span>
+                <span className="text-white fw-bold">
+                  "{searchQuery}" — <span style={{ color: "#00f2fe" }}>{filteredRestaurants.length} matching kitchens found</span>
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="btn btn-sm clear-search-pill-btn"
+              onClick={() => dispatch(clearSearchQuery())}
+            >
+              ✕ Clear Filter
+            </button>
+          </div>
+        )}
+
         <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
           <div>
             <CountRestaurant />

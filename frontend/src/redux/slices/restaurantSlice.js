@@ -4,6 +4,7 @@ import { getRestaurants, createRestaurant,deleteRestaurant, analyzeReviews } fro
 const initialState = {
     restaurants : [],
     count : 0,
+    searchQuery: "",
     loading : false,
     error : null,
     showVegOnly : false,
@@ -29,6 +30,12 @@ const restaurantSlice = createSlice({
         toggleVegOnly:(state) =>{
             state.showVegOnly = !state.showVegOnly;
             state.pureVegRestaurantsCount = calculatePureVegCount(state.restaurants,state.showVegOnly);
+        },
+        setSearchQuery: (state, action) => {
+            state.searchQuery = action.payload;
+        },
+        clearSearchQuery: (state) => {
+            state.searchQuery = "";
         },
         clearError:(state) =>{
             state.error = null;
@@ -127,9 +134,9 @@ export const {
     sortByRatings,
     sortByReviews,
     toggleVegOnly,
+    setSearchQuery,
+    clearSearchQuery,
     clearError,
-    
-    
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

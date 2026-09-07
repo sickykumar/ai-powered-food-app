@@ -180,6 +180,36 @@
   transform: translateY(-50%) scale(1.06);
 }
 
+/* Active Live Search Filter Banner (Zero URL exposure) */
+.active-search-filter-banner {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.12), rgba(139, 92, 246, 0.15));
+  border: 1px solid rgba(255, 0, 127, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.search-filter-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.clear-search-pill-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 4px 14px;
+  transition: all 0.2s ease;
+}
+
+.clear-search-pill-btn:hover {
+  background: rgba(255, 0, 127, 0.25);
+  border-color: #ff007f;
+  color: #ffffff;
+  transform: scale(1.04);
+}
+
 /* Header Cart Button */
 .header-cart-btn {
   display: flex;
