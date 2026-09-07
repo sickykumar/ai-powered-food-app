@@ -3,10 +3,10 @@
 import axios from "axios";
 import qs from "qs";
 
-const LIVE_BACKEND_URL = "https://api-food.sickykumar.in";
+const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 const api = axios.create({
-  baseURL: ((import.meta.env.VITE_API_URL || LIVE_BACKEND_URL).replace(/\/$/, "")) + "/api",
+  baseURL: `${apiBase}/api`,
   withCredentials: true,
   paramsSerializer: (params) => qs.stringify(params, { arrayFormat: "repeat" }),
 });
