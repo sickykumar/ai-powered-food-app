@@ -10,7 +10,6 @@ import {
   faUtensils,
   faStore,
   faStar,
-  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Search.css";
 
@@ -126,23 +125,36 @@ const Search = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filter matching restaurants for the live dropdown
+  // Filter matching restaurants for the live dropdown safely
   const trimmed = keyword.trim().toLowerCase();
   const matchingRestaurants = trimmed
     ? (restaurants || [])
-        .filter(
-          (r) =>
-            r.name.toLowerCase().includes(trimmed) ||
-            r.cuisine.toLowerCase().includes(trimmed) ||
-            (r.address && r.address.toLowerCase().includes(trimmed))
-        )
+        .filter((r) => {
+          if (!r) return false;
+          const nameMatch = r.name && r.name.toLowerCase().includes(trimmed);
+          const cuisineMatch = typeof r.cuisine === "string" && r.cuisine.toLowerCase().includes(trimmed);
+          const addressMatch = typeof r.address === "string" && r.address.toLowerCase().includes(trimmed);
+          const dishMatch = (allMenusCache || []).some(
+            (dish) =>
+              String(dish.restaurantId) === String(r._id) &&
+              dish.name &&
+              dish.name.toLowerCase().includes(trimmed)
+          );
+          return Boolean(nameMatch || cuisineMatch || addressMatch || dishMatch);
+        })
         .slice(0, 4)
     : [];
 
   const hasResults =
     matchingRestaurants.length > 0 || matchingDishes.length > 0;
 
-  // Search submission (Search button or Enter key)
+  const handleClear = () => {
+    setKeyword("");
+    setMatchingDishes([]);
+    setIsOpen(false);
+    dispatch(clearSearchQuery());
+  };
+
   const searchHandler = (e) => {
     if (e) e.preventDefault();
     setIsOpen(false);
@@ -150,34 +162,15 @@ const Search = () => {
     const q = keyword.trim();
     if (q) {
       dispatch(setSearchQuery(q));
-      // If not on Home page, navigate to Home (clean URL, no query parameters!)
       if (location.pathname !== "/") {
         navigate("/");
       }
-
-      // Smoothly scroll to the restaurant section on the home page
-      setTimeout(() => {
-        const target =
-          document.getElementById("restaurants-grid-section") ||
-          document.querySelector(".restaurant-section") ||
-          document.querySelector(".home-page-container");
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 150);
     } else {
       dispatch(clearSearchQuery());
       if (location.pathname !== "/") {
         navigate("/");
       }
     }
-  };
-
-  const handleClear = () => {
-    setKeyword("");
-    dispatch(clearSearchQuery());
-    setMatchingDishes([]);
-    setIsOpen(false);
   };
 
   const handleSelectRestaurant = (restId) => {
@@ -193,14 +186,13 @@ const Search = () => {
   return (
     <div className="header-search-container" ref={searchContainerRef}>
       <form onSubmit={searchHandler} className="search-input-wrapper">
-        {/* Left Magnifier Icon */}
         <FontAwesomeIcon icon={faSearch} className="search-left-icon" />
 
         <input
           type="text"
           id="search_field"
-          className="form-control search-field-input"
-          placeholder="Live Search Kitchens, Cuisines, Biryani, Pizza..."
+          className="search-field-input"
+          placeholder="Search kitchens, biryani..."
           value={keyword}
           autoComplete="off"
           onChange={(e) => {
@@ -217,7 +209,6 @@ const Search = () => {
           }}
         />
 
-        {/* Action Controls Box */}
         <div className="search-actions-box">
           {keyword && (
             <button
@@ -230,12 +221,11 @@ const Search = () => {
             </button>
           )}
 
-          {/* Upgraded High-Tech Glowing Search Button */}
           <button
             type="submit"
             id="search_btn"
             className="search-submit-btn"
-            title="Search dishes & restaurants"
+            title="Search"
           >
             <FontAwesomeIcon icon={faSearch} />
           </button>
@@ -273,7 +263,7 @@ const Search = () => {
                   <div className="result-item-info">
                     <div className="result-item-name">{rest.name}</div>
                     <div className="result-item-meta">
-                      {rest.cuisine} • {rest.location || "Express Delivery"}
+                      {typeof rest.cuisine === "string" ? rest.cuisine : "Gourmet Kitchen"} • {typeof rest.address === "string" ? (rest.address.length > 24 ? rest.address.slice(0, 24) + "..." : rest.address) : "Express Delivery"}
                     </div>
                   </div>
                   <div className="result-item-rating">

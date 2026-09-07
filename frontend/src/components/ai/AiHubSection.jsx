@@ -1,12 +1,11 @@
 import React from "react";
 import AiAutoScrollFeed from "./AiAutoScrollFeed";
-import AiFoodChatbot from "./AiFoodChatbot";
 import "./AiHub.css";
 
 /**
- * Split-Screen AI Hub Section
- * Left side: Auto-scrolling dynamic live recommendations & smart food pairings.
- * Right side: Interactive Chef Lumina AI Food Chatbot.
+ * Full-Width AI Hub Section
+ * Auto-scrolling dynamic live recommendations & smart food pairings.
+ * Chatbot is now a global floating widget (see FloatingChatbot).
  */
 const AiHubSection = ({ dishes = [] }) => {
   return (
@@ -16,20 +15,12 @@ const AiHubSection = ({ dishes = [] }) => {
         <span className="ai-section-pill">⚡ NEXT-GEN INTELLIGENCE</span>
         <h2 className="ai-hub-heading mt-2">AI Culinary Intelligence Hub</h2>
         <p className="ai-hub-subheading">
-          Real-time smart food pairings on the left, your personal AI Chef Sommelier on the right.
+          Real-time smart food pairings, algorithmic taste matches & live nutrition intelligence stream.
         </p>
       </div>
 
-      <div className="row g-4 ai-hub-grid">
-        {/* Left Side: Auto-scrolling live recommendations */}
-        <div className="col-12 col-lg-6 mb-4 mb-lg-0">
-          <AiAutoScrollFeed dishes={dishes} />
-        </div>
-
-        {/* Right Side: Interactive AI Food Chatbot */}
-        <div className="col-12 col-lg-6">
-          <AiFoodChatbot />
-        </div>
+      <div className="ai-hub-grid">
+        <AiAutoScrollFeed dishes={dishes} />
       </div>
     </section>
   );

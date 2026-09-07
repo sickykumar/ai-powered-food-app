@@ -4,14 +4,20 @@
 
 .ai-hub-section {
   position: relative;
-  border-radius: 28px;
-  padding: 44px 28px;
+  border-radius: 0;
+  padding: 52px 0;
   background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, rgba(15, 12, 28, 0.92) 100%);
-  border: 1px solid rgba(168, 85, 247, 0.28);
+  border-top: 1px solid rgba(168, 85, 247, 0.28);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.28);
+  border-left: none;
+  border-right: none;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(168, 85, 247, 0.15);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   overflow: hidden;
+  /* Break out of parent max-width container to span full viewport */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
 }
 
 .ai-hub-section::before {
@@ -22,6 +28,15 @@
   right: 0;
   height: 2px;
   background: linear-gradient(90deg, #ff007f 0%, #8b5cf6 35%, #00f2fe 75%, #ff9900 100%);
+}
+
+/* Inner content stays centered within readable max-width */
+.ai-hub-section > .text-center,
+.ai-hub-section > .ai-hub-grid {
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 16px;
 }
 
 .ai-section-pill {
@@ -649,8 +664,12 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 480px) {
   .ai-hub-section {
-    padding: 24px 12px;
-    border-radius: 20px;
+    padding: 28px 0;
+    border-radius: 0;
+  }
+  .ai-hub-section > .text-center,
+  .ai-hub-section > .ai-hub-grid {
+    padding: 0 12px;
   }
   .ai-hub-heading {
     font-size: 1.7rem;

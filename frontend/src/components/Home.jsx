@@ -132,14 +132,26 @@ const Home = () => {
 
   const { isAuthenticated, user } = useSelector((state) => state.user || {});
 
+  // Scroll to top on initial page load / refresh
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Sync route keyword to Redux search query
+  useEffect(() => {
+    if (keyword && keyword.trim()) {
+      dispatch(setSearchQuery(keyword.trim()));
+    }
+  }, [keyword, dispatch]);
+
   // Fetch restaurants from Redux
   useEffect(() => {
     if (restaurantsError) {
       toast.error(restaurantsError);
       return;
     }
-    dispatch(getRestaurants(keyword));
-  }, [dispatch, restaurantsError, keyword]);
+    dispatch(getRestaurants(""));
+  }, [dispatch, restaurantsError]);
 
   // Dynamically load all menus and dishes from live backend
   useEffect(() => {
@@ -289,28 +301,52 @@ const Home = () => {
     }
   };
 
-  // Filter restaurants by category or live search query
+  // Effective active search term
+  const activeSearch = (searchQuery || keyword || "").toLowerCase().trim();
+
+  // Filter restaurants by category or live search query safely
   const filteredRestaurants = (restaurants || []).filter((r) => {
+    if (!r) return false;
     if (showVegOnly && !r.isVeg) return false;
 
-    // Live global search query filtering (URL NOT exposed)
-    if (searchQuery && searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        (r.name && r.name.toLowerCase().includes(q)) ||
-        (r.cuisine && r.cuisine.toLowerCase().includes(q)) ||
-        (r.location && r.location.toLowerCase().includes(q)) ||
-        (r.address && r.address.toLowerCase().includes(q));
-      if (!matchesSearch) return false;
+    // Live global search query filtering (safely checking strings and dishes)
+    if (activeSearch) {
+      const q = activeSearch;
+      const nameMatch = r.name && r.name.toLowerCase().includes(q);
+      const cuisineMatch = typeof r.cuisine === "string" && r.cuisine.toLowerCase().includes(q);
+      const addressMatch = typeof r.address === "string" && r.address.toLowerCase().includes(q);
+      const locationMatch = typeof r.location === "string" && r.location.toLowerCase().includes(q);
+      const dishMatch = (allDishes || []).some(
+        (d) =>
+          String(d.restaurantId) === String(r._id) &&
+          ((d.name && d.name.toLowerCase().includes(q)) ||
+           (d.rawCategory && d.rawCategory.toLowerCase().includes(q)))
+      );
+
+      if (!nameMatch && !cuisineMatch && !addressMatch && !locationMatch && !dishMatch) {
+        return false;
+      }
     }
 
     if (activeCategory === "All") return true;
     if (activeCategory === "Pure Veg") return r.isVeg;
     return (
-      r.name.toLowerCase().includes(activeCategory.toLowerCase()) ||
-      (r.address && r.address.toLowerCase().includes(activeCategory.toLowerCase()))
+      (r.name && r.name.toLowerCase().includes(activeCategory.toLowerCase())) ||
+      (typeof r.address === "string" && r.address.toLowerCase().includes(activeCategory.toLowerCase()))
     );
   });
+
+  // Dishes matching active search
+  const matchingSearchDishes = activeSearch
+    ? (allDishes || []).filter((d) => {
+        const q = activeSearch;
+        return (
+          (d.name && d.name.toLowerCase().includes(q)) ||
+          (d.rawCategory && d.rawCategory.toLowerCase().includes(q)) ||
+          (d.restaurantName && d.restaurantName.toLowerCase().includes(q))
+        );
+      })
+    : [];
 
   return (
     <div className="home-page-container">
@@ -348,10 +384,6 @@ const Home = () => {
                   const cleaned = prompt.replace(/[🔥🥗🌱⚡]/gu, "").trim();
                   const searchWord = cleaned.split(" ")[1] || cleaned;
                   dispatch(setSearchQuery(searchWord));
-                  const target = document.getElementById("restaurants-grid-section");
-                  if (target) {
-                    target.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }
                 }}
               >
                 {prompt}
@@ -632,25 +664,91 @@ const Home = () => {
 
       {/* 7. ALL RESTAURANTS SHOWCASE & SMART FILTERS */}
       <section className="all-restaurants-section my-5" id="restaurants-grid-section">
-        {/* Active Search Query Feedback Bar (URL NOT exposed) */}
-        {searchQuery && (
+        {/* Active Search Query Feedback Bar */}
+        {(searchQuery || keyword) && (
           <div className="active-search-filter-banner mb-4 p-3 rounded-4 d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center gap-2">
               <span className="search-filter-icon">🔍</span>
               <div>
-                <span className="text-white-50 small d-block">Live Filter Active:</span>
+                <span className="text-white-50 small d-block">Search Results For:</span>
                 <span className="text-white fw-bold">
-                  "{searchQuery}" — <span style={{ color: "#00f2fe" }}>{filteredRestaurants.length} matching kitchens found</span>
+                  "{searchQuery || keyword}" —{" "}
+                  <span style={{ color: "#00f2fe" }}>
+                    {filteredRestaurants.length} matching kitchens
+                    {matchingSearchDishes.length > 0 ? ` • ${matchingSearchDishes.length} dishes found` : ""}
+                  </span>
                 </span>
               </div>
             </div>
             <button
               type="button"
               className="btn btn-sm clear-search-pill-btn"
-              onClick={() => dispatch(clearSearchQuery())}
+              onClick={() => {
+                dispatch(clearSearchQuery());
+                if (keyword) navigate("/");
+              }}
             >
-              ✕ Clear Filter
+              ✕ Clear Search
             </button>
+          </div>
+        )}
+
+        {/* Matching Dishes Preview (if user searched for a dish) */}
+        {(searchQuery || keyword) && matchingSearchDishes.length > 0 && (
+          <div className="matching-dishes-results-box mb-4">
+            <h4 className="text-white mb-3 d-flex align-items-center gap-2" style={{ fontSize: "1.15rem" }}>
+              <span>🍽️</span>
+              <span>
+                Matching Dishes for <span style={{ color: "#00f2fe" }}>"{searchQuery || keyword}"</span>
+              </span>
+              <span className="badge bg-primary rounded-pill small ms-2">{matchingSearchDishes.length}</span>
+            </h4>
+            <div className="row g-3">
+              {matchingSearchDishes.slice(0, 6).map((dish) => (
+                <div key={dish.id || dish._id} className="col-12 col-sm-6 col-lg-4">
+                  <div
+                    className="dish-slider-card p-3 d-flex gap-3 align-items-center"
+                    style={{ cursor: "pointer", borderRadius: "16px" }}
+                    onClick={() => {
+                      if (dish.restaurantId) {
+                        navigate(`/eats/stores/${dish.restaurantId}/menus`);
+                      }
+                    }}
+                  >
+                    <img
+                      src={dish.image}
+                      alt={dish.name}
+                      style={{ width: "70px", height: "70px", objectFit: "cover", borderRadius: "12px", flexShrink: 0 }}
+                      onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150&q=80";
+                      }}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="d-flex align-items-center justify-content-between">
+                        <h6 className="text-white m-0 text-truncate fw-bold" style={{ fontSize: "0.92rem" }}>
+                          {dish.name}
+                        </h6>
+                        <span style={{ fontSize: "0.72rem", color: dish.isVeg ? "#00f2fe" : "#ff007f", flexShrink: 0 }}>
+                          {dish.isVeg ? "🌱" : "🍗"}
+                        </span>
+                      </div>
+                      <small className="text-muted d-block text-truncate mt-1" style={{ fontSize: "0.75rem" }}>
+                        at {dish.restaurantName}
+                      </small>
+                      <div className="d-flex align-items-center justify-content-between mt-2">
+                        <span style={{ color: "#00f2fe", fontWeight: "700", fontSize: "0.85rem" }}>
+                          ₹{dish.price}
+                        </span>
+                        <span className="badge bg-secondary-subtle text-white small" style={{ fontSize: "0.7rem" }}>
+                          View Menu →
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <hr className="my-4 border-secondary opacity-25" />
           </div>
         )}
 
@@ -694,7 +792,17 @@ const Home = () => {
             ) : (
               <div className="col-12 text-center py-5">
                 <Message variant="info">
-                  No restaurants matching your current filter. Try resetting filters or searching another dish.
+                  No kitchens matching "{searchQuery || keyword}".
+                  <br />
+                  <button
+                    className="btn btn-sm btn-outline-info mt-3 rounded-pill px-3"
+                    onClick={() => {
+                      dispatch(clearSearchQuery());
+                      if (keyword) navigate("/");
+                    }}
+                  >
+                    Reset Search & View All Kitchens
+                  </button>
                 </Message>
               </div>
             )}

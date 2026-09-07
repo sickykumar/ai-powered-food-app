@@ -90,15 +90,21 @@ const AiFoodChatbot = () => {
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
+  const messagesAreaRef = useRef(null);
   const nextMsgId = useRef(2);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (smooth = true) => {
+    if (messagesAreaRef.current) {
+      messagesAreaRef.current.scrollTo({
+        top: messagesAreaRef.current.scrollHeight,
+        behavior: smooth ? "smooth" : "auto",
+      });
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Only scroll the internal chat container, never the window
+    scrollToBottom(false);
   }, [messages, isTyping]);
 
   const handleSendMessage = async (customText) => {
@@ -191,7 +197,7 @@ const AiFoodChatbot = () => {
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="ai-messages-area">
+      <div className="ai-messages-area" ref={messagesAreaRef}>
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -215,7 +221,6 @@ const AiFoodChatbot = () => {
             <small className="text-muted ml-2">Chef Lumina is crafting recommendations...</small>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input Form */}

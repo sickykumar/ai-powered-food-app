@@ -1,0 +1,66 @@
+/* Circular Floating Scroll to Top Button */
+
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff007f, #8b5cf6);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 1040;
+  box-shadow: 0 8px 24px rgba(255, 0, 127, 0.4), 0 0 16px rgba(139, 92, 246, 0.3);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scrollBtnPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+/* Stacks above Floating Cart if cart has items */
+.scroll-to-top-btn.cart-offset {
+  bottom: 88px;
+}
+
+@keyframes scrollBtnPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.scroll-to-top-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  background: linear-gradient(135deg, #ff2e93, #a855f7);
+  box-shadow: 0 12px 30px rgba(255, 0, 127, 0.55), 0 0 24px rgba(0, 242, 254, 0.45);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+}
+
+.scroll-to-top-btn:active {
+  transform: scale(0.92);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 576px) {
+  .scroll-to-top-btn {
+    bottom: 22px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+  }
+  .scroll-to-top-btn.cart-offset {
+    bottom: 82px;
+  }
+}

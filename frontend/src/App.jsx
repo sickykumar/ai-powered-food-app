@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./components/Home";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
@@ -19,9 +19,20 @@ import OrderDetails from "./components/order/OrderDetails";
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import ErrorPage from "./components/layout/ErrorPage";
 import MetaSEO from "./components/layout/MetaSEO";
+import ScrollToTopBtn from "./components/layout/ScrollToTopBtn";
+import FloatingChatbot from "./components/ai/FloatingChatbot";
 import coldStorageGuard from "./utils/coldStorageGuard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// Always reset scroll to the top of the page on route transition
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function App() {
   useEffect(() => {
@@ -35,6 +46,7 @@ function App() {
     <>
       <ToastContainer position="bottom-right" theme="dark" autoClose={3000} />
       <Router>
+        <ScrollToTop />
         <MetaSEO />
         <div className="App">
           <Header />
@@ -42,6 +54,8 @@ function App() {
             <Routes>
               {/* Public Routes - accessible with or without login */}
               <Route path="/" element={<Home />} exact />
+              <Route path="/search" element={<Home />} />
+              <Route path="/search/:keyword" element={<Home />} />
               <Route
                 path="/eats/stores/search/:keyword"
                 element={<Home />}
@@ -116,6 +130,8 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <ScrollToTopBtn />
+          <FloatingChatbot />
         </div>
       </Router>
     </>

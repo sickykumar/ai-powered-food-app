@@ -1,0 +1,252 @@
+/* ==========================================================================
+   Floating AI Chatbot — Holographic Cyber FAB + Slide-Up Panel
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   FAB Button — Bottom Left with Dual Glow Rings
+   -------------------------------------------------------------------------- */
+.floating-ai-fab {
+  position: fixed;
+  bottom: 28px;
+  left: 24px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff007f 0%, #8b5cf6 60%, #00f2fe 100%);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1050;
+  box-shadow:
+    0 8px 32px rgba(255, 0, 127, 0.45),
+    0 0 20px rgba(139, 92, 246, 0.35),
+    0 0 40px rgba(0, 242, 254, 0.15);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fabEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  outline: none;
+  overflow: visible;
+}
+
+@keyframes fabEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0) translateY(40px) rotate(-180deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+.floating-ai-fab:hover {
+  transform: translateY(-4px) scale(1.1);
+  box-shadow:
+    0 14px 40px rgba(255, 0, 127, 0.6),
+    0 0 30px rgba(139, 92, 246, 0.5),
+    0 0 50px rgba(0, 242, 254, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.floating-ai-fab:active {
+  transform: scale(0.92);
+}
+
+.floating-ai-fab.fab-active {
+  background: rgba(28, 22, 50, 0.95);
+  border-color: rgba(255, 0, 127, 0.5);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(255, 0, 127, 0.3);
+}
+
+/* Icon inside FAB */
+.fab-icon-wrap {
+  font-size: 1.5rem;
+  z-index: 2;
+  position: relative;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fab-active .fab-icon-wrap {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* Pulsing Glow Rings */
+.fab-glow-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 0, 127, 0.5);
+  animation: fabGlowPulse 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+.fab-glow-ring-2 {
+  border-color: rgba(0, 242, 254, 0.4);
+  animation-delay: 0.7s;
+}
+
+.fab-active .fab-glow-ring {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes fabGlowPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* Tooltip label on hover */
+.fab-label-tooltip {
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 12, 28, 0.95);
+  color: #f8fafc;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 10px;
+  white-space: nowrap;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(-50%) translateX(-8px);
+}
+
+.floating-ai-fab:hover .fab-label-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* --------------------------------------------------------------------------
+   Backdrop Overlay
+   -------------------------------------------------------------------------- */
+.floating-chat-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1044;
+  animation: backdropFadeIn 0.25s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   Chat Panel — Slides up from bottom-left
+   -------------------------------------------------------------------------- */
+.floating-chat-panel {
+  position: fixed;
+  bottom: 96px;
+  left: 24px;
+  width: 400px;
+  max-height: calc(100vh - 130px);
+  z-index: 1048;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(168, 85, 247, 0.2),
+    0 0 60px rgba(255, 0, 127, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: bottom left;
+}
+
+.floating-chat-panel.panel-open {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.floating-chat-panel.panel-closed {
+  opacity: 0;
+  transform: scale(0.7) translateY(20px);
+  pointer-events: none;
+}
+
+/* Force chatbot container to fit within the panel */
+.floating-chat-panel .ai-chatbot-container {
+  height: calc(100vh - 160px);
+  max-height: 560px;
+  border-radius: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE RESPONSIVE — < 576px
+   -------------------------------------------------------------------------- */
+@media (max-width: 576px) {
+  .floating-ai-fab {
+    width: 52px;
+    height: 52px;
+    bottom: 22px;
+    left: 18px;
+  }
+
+  .fab-icon-wrap {
+    font-size: 1.3rem;
+  }
+
+  .fab-label-tooltip {
+    display: none;
+  }
+
+  .floating-chat-panel {
+    left: 8px;
+    right: 8px;
+    bottom: 84px;
+    width: auto;
+    max-height: calc(100vh - 110px);
+    border-radius: 20px;
+  }
+
+  .floating-chat-panel .ai-chatbot-container {
+    height: calc(100vh - 130px);
+    max-height: 480px;
+    border-radius: 20px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 380px) {
+  .floating-ai-fab {
+    width: 48px;
+    height: 48px;
+    bottom: 16px;
+    left: 12px;
+  }
+
+  .floating-chat-panel {
+    left: 4px;
+    right: 4px;
+    bottom: 74px;
+  }
+}

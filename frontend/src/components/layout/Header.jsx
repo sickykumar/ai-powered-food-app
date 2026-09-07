@@ -46,9 +46,9 @@ const Header = () => {
 
   return (
     <header className="main-header sticky-top">
-      <div className="header-container d-flex align-items-center justify-content-between">
+      <div className="header-container d-flex align-items-center justify-content-between flex-wrap">
         {/* Clean Brand Logo */}
-        <div className="d-flex align-items-center">
+        <div className="header-brand-box d-flex align-items-center">
           <Link to="/" className="brand-logo-link">
             <img
               src="/images/logo.webp"
@@ -64,7 +64,7 @@ const Header = () => {
         </div>
 
         {/* Right Actions: Cart & User Profile */}
-        <div className="d-flex align-items-center gap-3">
+        <div className="header-actions-box d-flex align-items-center gap-2 gap-sm-3">
           {/* Cart Icon Button */}
           <Link to="/cart" className="header-cart-btn" title="View Cart">
             <div className="position-relative">
@@ -147,9 +147,10 @@ const Header = () => {
             </div>
           ) : (
             !loading && (
-              <div className="d-flex align-items-center gap-2">
-                <Link to="/users/login" className="header-login-btn">
-                  Sign In
+              <div className="header-auth-buttons d-flex align-items-center">
+                <Link to="/users/login" className="header-login-btn" title="Sign In">
+                  <FontAwesomeIcon icon={faUser} className="d-inline-block d-sm-none" />
+                  <span className="d-none d-sm-inline">Sign In</span>
                 </Link>
                 <Link
                   to="/users/signup"

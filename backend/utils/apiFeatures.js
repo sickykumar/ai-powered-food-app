@@ -7,15 +7,13 @@ class APIFeatures {
   }
 
   search() {
-    //this.queryStr.keyword -> if keyword exists ie if we type
-    //localhost:4000/api/v1/products?keyword=AirPods
-    const keyword = this.queryStr.keyword
+    const raw = this.queryStr.keyword ? this.queryStr.keyword.trim() : "";
+    const keyword = raw
       ? {
-          // search in name field
-          name: {
-            $regex: this.queryStr.keyword,
-            $options: "i",
-          },
+          $or: [
+            { name: { $regex: raw, $options: "i" } },
+            { address: { $regex: raw, $options: "i" } },
+          ],
         }
       : {};
 

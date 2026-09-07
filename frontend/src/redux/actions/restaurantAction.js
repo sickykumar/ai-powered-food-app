@@ -9,16 +9,17 @@ import api from "../../utils/api";
 
 //get all restaurants
 export const getRestaurants = createAsyncThunk(
-    "restaurants/getRestaurants",async(keyword =" ",{rejectWithValue}) =>{
+    "restaurants/getRestaurants",async(keyword = "",{rejectWithValue}) =>{
        try{
-        //API call
-        const {data} = await api.get(`/v1/eats/stores?keyword=${keyword}`);
+        const trimmed = (keyword || "").trim();
+        const url = trimmed ? `/v1/eats/stores?keyword=${encodeURIComponent(trimmed)}` : `/v1/eats/stores`;
+        const {data} = await api.get(url);
         return {
-            restaurants : data.restaurants,
-            count : data.count,
+            restaurants : data.restaurants || [],
+            count : data.count || 0,
         }
        }catch(error){
-         return rejectWithValue(error.response?.data?.message || error.message);
+          return rejectWithValue(error.response?.data?.message || error.message);
        }
     })
 

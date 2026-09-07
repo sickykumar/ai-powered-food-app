@@ -12,11 +12,10 @@ const Slider3D = ({
   title = "",
   subtitle = "",
   badge = "3D SHOWCASE",
-  autoPlay = false,
-  autoPlayInterval = 4000,
+  autoPlay = true,
+  autoPlayInterval = 3000,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
@@ -40,22 +39,19 @@ const Slider3D = ({
     setCurrentIndex((prev) => (prev - 1 + total) % total);
   };
 
+  // Continuous auto-play timer that automatically advances to the next card
   useEffect(() => {
-    if (!autoPlay || isHovered || total <= 1) return;
+    if (!autoPlay || total <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % total);
     }, autoPlayInterval);
     return () => clearInterval(interval);
-  }, [autoPlay, isHovered, total, autoPlayInterval]);
+  }, [autoPlay, total, autoPlayInterval]);
 
   if (!items || items.length === 0) return null;
 
   return (
-    <div
-      className="slider3d-wrapper my-5"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="slider3d-wrapper my-5">
       {/* Section Header */}
       <div className="slider3d-header d-flex flex-wrap justify-content-between align-items-end mb-4">
         <div>
