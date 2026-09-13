@@ -21,6 +21,7 @@ import ErrorPage from "./components/layout/ErrorPage";
 import MetaSEO from "./components/layout/MetaSEO";
 import ScrollToTopBtn from "./components/layout/ScrollToTopBtn";
 import FloatingChatbot from "./components/ai/FloatingChatbot";
+import ServerWakeNotice from "./components/layout/ServerWakeNotice";
 // import coldStorageGuard from "./utils/coldStorageGuard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -132,6 +133,7 @@ function App() {
           <Footer />
           <ScrollToTopBtn />
           <FloatingChatbot />
+          <ServerWakeNotice />
         </div>
       </Router>
     </>

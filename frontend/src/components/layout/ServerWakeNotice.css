@@ -1,0 +1,193 @@
+.server-wake-portal {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  font-family: inherit;
+  pointer-events: auto;
+  animation: wakeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes wakeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.server-wake-card {
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  background: rgba(18, 22, 34, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 107, 0, 0.35);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7),
+              0 0 25px rgba(255, 107, 0, 0.2);
+  color: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+
+.server-wake-card.connected {
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7),
+              0 0 25px rgba(34, 197, 94, 0.25);
+}
+
+.server-wake-glow-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b00, #ff8e53, #e11d48, #ff6b00);
+  background-size: 200% 100%;
+  animation: wakeGlowMove 2s linear infinite;
+}
+
+.server-wake-card.connected .server-wake-glow-bar {
+  background: linear-gradient(90deg, #22c55e, #10b981, #059669);
+  animation: none;
+}
+
+@keyframes wakeGlowMove {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.server-wake-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.server-wake-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.server-wake-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 107, 0, 0.15);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #ff8e53;
+  position: relative;
+}
+
+.server-wake-icon-box .pulse-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 107, 0, 0.6);
+  animation: wakePulse 1.6s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  opacity: 0;
+}
+
+@keyframes wakePulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.server-wake-card.connected .server-wake-icon-box {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.server-wake-card.connected .server-wake-icon-box .pulse-ring {
+  display: none;
+}
+
+.server-wake-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+
+.server-wake-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.server-wake-close-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.server-wake-body {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.server-wake-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.server-wake-timer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: #f59e0b;
+}
+
+.server-wake-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 107, 0, 0.12);
+  color: #ff8e53;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.server-wake-card.connected .server-wake-badge {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+@media (max-width: 640px) {
+  .server-wake-portal {
+    bottom: 80px;
+    right: 16px;
+    left: 16px;
+  }
+  .server-wake-card {
+    width: 100%;
+  }
+}

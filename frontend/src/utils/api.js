@@ -11,24 +11,86 @@ const api = axios.create({
   paramsSerializer: (params) => qs.stringify(params, { arrayFormat: "repeat" }),
 });
 
-// Attach JWT token from localStorage to every request
+// Cold start wake state tracker
+const listeners = new Set();
+let pendingCount = 0;
+let wakeTimer = null;
+let isWaking = false;
+
+const notifyListeners = (state) => {
+  listeners.forEach((fn) => {
+    try {
+      fn(state);
+    } catch (e) {
+      console.error("API Wake listener error:", e);
+    }
+  });
+};
+
+export const subscribeServerWake = (listener) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};
+
+// Attach JWT token from localStorage to every request & track wake status
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    pendingCount++;
+    if (pendingCount === 1) {
+      // If request takes > 2.5s, trigger waking state notification (cold start)
+      if (wakeTimer) clearTimeout(wakeTimer);
+      wakeTimer = setTimeout(() => {
+        isWaking = true;
+        notifyListeners({ isWaking: true, state: "waking" });
+      }, 2500);
+    }
+
     return config;
   },
   (error) => {
+    pendingCount = Math.max(0, pendingCount - 1);
+    if (pendingCount === 0 && wakeTimer) {
+      clearTimeout(wakeTimer);
+      wakeTimer = null;
+    }
     return Promise.reject(error);
   }
 );
 
 // Auto-recovery interceptor: if JWT is expired or invalid due to secret change, clear stale token
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    pendingCount = Math.max(0, pendingCount - 1);
+    if (pendingCount === 0) {
+      if (wakeTimer) {
+        clearTimeout(wakeTimer);
+        wakeTimer = null;
+      }
+      if (isWaking) {
+        isWaking = false;
+        notifyListeners({ isWaking: false, state: "connected" });
+      }
+    }
+    return response;
+  },
   (error) => {
+    pendingCount = Math.max(0, pendingCount - 1);
+    if (pendingCount === 0) {
+      if (wakeTimer) {
+        clearTimeout(wakeTimer);
+        wakeTimer = null;
+      }
+      if (isWaking) {
+        isWaking = false;
+        notifyListeners({ isWaking: false, state: "error" });
+      }
+    }
+
     const message = error.response?.data?.message || error.response?.data?.errMessage || "";
 
     if (
