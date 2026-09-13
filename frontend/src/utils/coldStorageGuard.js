@@ -20,6 +20,7 @@ class ColdStorageGuard {
     if (this.isInitialized) return;
     this.isInitialized = true;
 
+    /*
     // First ping immediately
     this.ping();
 
@@ -37,6 +38,7 @@ class ColdStorageGuard {
         }
       });
     }
+    */
   }
 
   async ping() {

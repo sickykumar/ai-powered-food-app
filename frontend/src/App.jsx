@@ -21,7 +21,7 @@ import ErrorPage from "./components/layout/ErrorPage";
 import MetaSEO from "./components/layout/MetaSEO";
 import ScrollToTopBtn from "./components/layout/ScrollToTopBtn";
 import FloatingChatbot from "./components/ai/FloatingChatbot";
-import coldStorageGuard from "./utils/coldStorageGuard";
+// import coldStorageGuard from "./utils/coldStorageGuard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -38,8 +38,8 @@ function App() {
   useEffect(() => {
     // Load authenticated user if token is present
     store.dispatch(loadUser());
-    // Start client-side cold storage keep-alive heartbeat
-    coldStorageGuard.init();
+    // Start client-side cold storage keep-alive heartbeat (Disabled to save Render free tier hours)
+    // coldStorageGuard.init();
   }, []);
 
   return (

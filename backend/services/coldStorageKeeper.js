@@ -8,6 +8,7 @@ const axios = require("axios");
 let pingIntervalId = null;
 
 const startColdStorageKeeper = () => {
+  /*
   // Render provides RENDER_EXTERNAL_URL automatically in production
   const serverUrl =
     process.env.RENDER_EXTERNAL_URL ||
@@ -63,6 +64,8 @@ const startColdStorageKeeper = () => {
       console.warn(`[ColdStorageKeeper] Keep-alive ping failed: ${err.message}`);
     }
   }, INTERVAL_MS);
+  */
+  console.log("[ColdStorageKeeper] Service is currently paused/commented out to save Render free tier hours.");
 };
 
 const stopColdStorageKeeper = () => {

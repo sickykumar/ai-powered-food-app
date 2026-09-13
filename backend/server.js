@@ -13,7 +13,7 @@ dotenv.config({ path: "./config/config.env" });
 
 const app = require("./app");
 const connectDatabase = require("./config/database");
-const { startColdStorageKeeper } = require("./services/coldStorageKeeper");
+// const { startColdStorageKeeper } = require("./services/coldStorageKeeper");
 
 // Connecting to database
 connectDatabase();
@@ -31,8 +31,8 @@ const server = app.listen(PORT, () => {
   console.log(
     `Server started on PORT: ${PORT} in ${process.env.MODE || "DEVELOPMENT"} mode.`
   );
-  // Start server-side cold storage self-ping keeper
-  startColdStorageKeeper();
+  // Start server-side cold storage self-ping keeper (Disabled to save Render free tier hours)
+  // startColdStorageKeeper();
 });
 
 // Handle unhandled promise rejections
